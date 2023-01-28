@@ -9,7 +9,7 @@ export const insertPublication = async ({ image, message, author, location, stat
         const posts = await query(insertPublicationQuery, [message, author.user_id, location, status, image || null]);
         return posts;
     } catch (error) {
-        console.error("Error en - selectUserById");
+        console.error("Error en - insertPublication");
         throw error;
     }
 

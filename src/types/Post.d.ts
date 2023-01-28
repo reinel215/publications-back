@@ -22,4 +22,11 @@ export interface UpdatePost {
     post_id: string;
 }
 
+
+export interface Like {
+    userId: string;
+    postId: string;
+    create_at?: Date;
+}
+
 export type InsertPost = Omit<Post, "create_at" | "likes">

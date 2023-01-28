@@ -4,8 +4,9 @@ import isAuth from '../../middlewares/auth/auth';
 import { CreatePostScheme, UpdatePostScheme } from '../../schemes/postSchemes';
 import createPubliction from '../../services/publications/createPublication';
 import getPublicationsByUserId from '../../services/publications/getPublicationsByUserId';
+import likePublication from '../../services/publications/likePublication';
 import putPublication from '../../services/publications/putPublication';
-import { InsertPost, UpdatePost } from '../../types/Post';
+import { InsertPost, Like, UpdatePost } from '../../types/Post';
 
 
 const router = Router();
@@ -69,7 +70,7 @@ const publicationsRouter = () => {
                 res.status(404).json({ error: "Error on request" });
                 return;
             }
-            const updatePost : UpdatePost = {
+            const updatePost: UpdatePost = {
                 message: req.body.message,
                 status: req.body.status,
                 author: req.user.user_id.toString(),
@@ -85,6 +86,24 @@ const publicationsRouter = () => {
 
 
 
+    router.post("/like-publication/:postId", isAuth, async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const postId = req.params.postId;
+            if (!req.user || !postId) {
+                res.status(404).json({ error: "Error on request" });
+                return;
+            }
+            const like: Like = {
+                userId: req.user.user_id.toString(),
+                postId: postId
+            }
+            await likePublication(like);
+
+            res.status(200).json({ message: "The post was liked!" });
+        } catch (error) {
+            next(error);
+        }
+    })
 
 
     return router;
