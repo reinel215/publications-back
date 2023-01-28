@@ -1,57 +1,45 @@
-import registerUser from '../../services/users/registerUser';
-import login from '../../services/users/login';
 import { Router, Request, Response, NextFunction } from 'express'
+import { PassportStatic } from 'passport';
+import { insertUser } from '../../dataAccess/user/insertUser';
+import isAuth from '../../middlewares/auth/auth';
+import { SignupRequestSchema } from '../../schemes/userSchemes';
+import { UserRequest } from '../../types/User';
 
 const router = Router();
 
 
-router.post('/register', async (req: Request, res: Response, next: NextFunction) => {
+const userRouter = (passport: PassportStatic) => {
+    router.post('/register', async (req: Request, res: Response, next: NextFunction) => {
 
-    try {
-        const { email, password, firstname, lastname } = req.body;
-
-        if (!(email && password && firstname && lastname)) {
-            next({ status: 400, message: "All the values are required" });
-            return;
+        try {
+            const userRequest: UserRequest = req.body;
+            await SignupRequestSchema.validate(userRequest);
+            await insertUser(userRequest);
+            res.status(200).json({ message: "The user has been registered" });
+        } catch (error) {
+            next(error);
         }
 
-        await registerUser({ email, password, firstname, lastname });
-        res.status(200).json({ message: "The user has been registered" });
+    })
 
-    } catch (error) {
-        next(error);
-    }
-
-})
-
-
-
-router.post('/login', async (req: Request, res: Response, next: NextFunction) => {
-
-    try {
-        const { email, password } = req.body;
-
-        if (!(email && password)) {
-            next({ status: 400, message: "All the values are requiered" });
-            return;
-        }
-
-        await login({ email, password });
-
-        res.status(200).json({ message: 'loggin success' });
-
-    } catch (error) {
-        next(error);
-    }
-});
+    router.post('/auth/login', passport.authenticate('local', {}), (req: Request, res: Response) => {
+        res.status(200).json({
+            message: "ha iniciado sesion",
+            user: req?.user?.username
+        });
+    })
 
 
 
-router.get("/prueba", (req: Request, res: Response) => {
-    res.status(200).json({ message: 'Hola mundo' });
-    return;
-})
+    //test the auth
+    router.get("/prueba", isAuth, (req: Request, res: Response) => {
+        res.status(200).json({ message: 'Hola mundo' });
+    })
+
+    return router;
+}
 
 
 
-export default router;
+
+export default userRouter;

@@ -1,22 +1,13 @@
-import bcrypt from 'bcryptjs';
+import selectUserByUsername from "../../dataAccess/user/selectUserByUsername";
+import { UserSerialize } from "../../types/User";
 
-
-const login = async ({ email, password } : any) => {
+const login = async ({ username }: { username: string }) : Promise<UserSerialize> => {
     try {
-        // const user = await selectUserByEmail({ email });
-        // if (!user) {
-        //     throw { status: 400, message: "Invalid email" };
-        // }
-
-        // //compare the two passwords
-        // const passwordMatch = await bcrypt.compare(password, user.password);
-        // if (!passwordMatch) {
-        //     throw { status: 400, message: "Invalid password" };
-        // }
-
-
-        // const payload = { email, id: user.user_id };
-
+        const user = await selectUserByUsername({ username });
+        if (!user) {
+            throw { status: 400, message: "Invalid username" };
+        }
+        return { username, id: user.user_id };
 
     } catch (error) {
         console.error("Error en - login");

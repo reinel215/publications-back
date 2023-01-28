@@ -1,32 +1,12 @@
-// const { config } = require("../../config/config");
-// const getHeaderToken = require("../../utils/getHeaderToken");
-// import express, { Express, Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 
-// const isAuth = (req, res, next) => {
-//     try {
-//         const accessToken = getHeaderToken({req});  
-
-//         if (accessToken == null) {
-//             next({ status: 400, message: "Invalid access token" });
-//             return;
-//         }
-    
-//         jwt.verify(accessToken, config.accessTokenSecret, (err, user) => {
-//             if (err) {
-//                 next({ status: 400, message: "Error in token verification" });
-//                 return;
-//             }
-//             req.user = user;
-//             next();
-//         }); 
-
-//     } catch (error) {
-//         next({ status: 500, message: "Token in the header is invalid." });
-//     }
-    
-
-// }
+const isAuth = (req: Request, res: Response, next: NextFunction) => {
+    if (req.isAuthenticated())
+        next();
+    else
+        next({ status: 301, message: "Your not authorized" });
+}
 
 
-// module.exports = isAuth;
+export default isAuth;

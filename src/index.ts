@@ -1,6 +1,6 @@
 'user strict';
 import express, { Express, Request, Response } from 'express';
-const app : Express = express();
+const app: Express = express();
 
 
 import { config } from './config/config';
@@ -15,6 +15,24 @@ if (config.dev) {
 }
 
 
+
+//EXPRESS SESSION
+const expressSession = require('express-session');
+const sessionOptions = {
+    secret: config.token,
+    resave: false,
+    saveUninitialized: false,
+}
+app.use(expressSession(sessionOptions));
+
+
+
+//PASSPORT SETTINGS
+import passport from 'passport';
+import { configPassport } from './config/passport/passport';
+app.use(passport.initialize());
+app.use(passport.session());
+configPassport(passport); //configuramos passport
 
 
 //BODY PARSER
@@ -44,8 +62,9 @@ app.use(compression());
 
 //RUTAS
 import userRouter from './routes/users/users';
-app.use('/api/users', userRouter);
+app.use('/api/users', userRouter(passport));
 
+app.get('/favicon.ico', (req, res) => res.status(204));
 
 //Errores
 //page not found

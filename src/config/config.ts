@@ -11,4 +11,5 @@ export const config = {
     dbName: process.env.DB_NAME,
     dbPassword: process.env.DB_PASSWORD,
     dbPort: process.env.DB_PORT,
+    token: process.env.TOKEN,
 }
