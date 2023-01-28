@@ -1,8 +1,9 @@
-import bcrypt from 'bcryptjs';
+import { insertUser } from "../../dataAccess/user/insertUser";
+import { UserRequest } from "../../types/User";
 
-export const registerUser = async ({ email, password, firstname, lastname }: any) => {
+export const registerUser = async (userRequest: UserRequest) => {
     try {
-        const hashPassword = await bcrypt.hash(password, 10);
+        await insertUser(userRequest);
     } catch (error) {
         console.error("Error en - registerUser");
         throw error;
