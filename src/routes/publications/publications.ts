@@ -6,6 +6,7 @@ import createPubliction from '../../services/publications/createPublication';
 import getPublicationsByUserId from '../../services/publications/getPublicationsByUserId';
 import likePublication from '../../services/publications/likePublication';
 import putPublication from '../../services/publications/putPublication';
+import removeLike from '../../services/publications/removeLike';
 import { InsertPost, Like, UpdatePost } from '../../types/Post';
 
 
@@ -98,6 +99,27 @@ const publicationsRouter = () => {
                 postId: postId
             }
             await likePublication(like);
+
+            res.status(200).json({ message: "The post was liked!" });
+        } catch (error) {
+            next(error);
+        }
+    })
+
+
+
+    router.delete("/unlike-publication/:postId", isAuth, async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const postId = req.params.postId;
+            if (!req.user || !postId) {
+                res.status(404).json({ error: "Error on request" });
+                return;
+            }
+            const like: Like = {
+                userId: req.user.user_id.toString(),
+                postId: postId
+            }
+            await removeLike(like);
 
             res.status(200).json({ message: "The post was liked!" });
         } catch (error) {
