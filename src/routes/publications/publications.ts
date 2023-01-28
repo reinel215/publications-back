@@ -1,9 +1,11 @@
 import { Router, Request, Response, NextFunction } from 'express'
+import { deletePublication } from '../../dataAccess/publications/deletePublication';
 import isAuth from '../../middlewares/auth/auth';
-import { CreatePostScheme } from '../../schemes/postSchemes';
+import { CreatePostScheme, UpdatePostScheme } from '../../schemes/postSchemes';
 import createPubliction from '../../services/publications/createPublication';
 import getPublicationsByUserId from '../../services/publications/getPublicationsByUserId';
-import { InsertPost } from '../../types/Post';
+import putPublication from '../../services/publications/putPublication';
+import { InsertPost, UpdatePost } from '../../types/Post';
 
 
 const router = Router();
@@ -39,6 +41,51 @@ const publicationsRouter = () => {
             next(error);
         }
     })
+
+
+    router.delete("/:id", isAuth, async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const postId = req.params.id;
+            if (!req.user || !postId) {
+                res.status(404).json({ error: "Error on request" });
+                return;
+            }
+
+            await deletePublication({ post_id: postId, author: req.user?.user_id.toString() });
+
+            res.status(200).json({ message: "The post was deleted!" });
+        } catch (error) {
+            next(error);
+        }
+    })
+
+
+
+    router.put("/:id", isAuth, async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            await UpdatePostScheme.validate(req.body);
+            const postId = req.params.id;
+            if (!req.user || !postId) {
+                res.status(404).json({ error: "Error on request" });
+                return;
+            }
+            const updatePost : UpdatePost = {
+                message: req.body.message,
+                status: req.body.status,
+                author: req.user.user_id.toString(),
+                post_id: postId
+            }
+            await putPublication(updatePost);
+
+            res.status(200).json({ message: "The post was updated!" });
+        } catch (error) {
+            next(error);
+        }
+    })
+
+
+
+
 
     return router;
 }

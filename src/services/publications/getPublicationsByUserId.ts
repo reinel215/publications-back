@@ -4,7 +4,7 @@ const getPublicationsByUserId = async ({ userId }: { userId: string }) => {
     try {
         return await selectPulicationsByAuthor({ userId });
     } catch (error) {
-        console.error("Error en - registerUser");
+        console.error("Error en - getPublicationsByUserId");
         throw error;
     }
 

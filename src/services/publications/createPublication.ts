@@ -5,7 +5,7 @@ const createPubliction = async (post: InsertPost) => {
     try {
         return await insertPublication(post);
     } catch (error) {
-        console.error("Error en - registerUser");
+        console.error("Error en - createPubliction");
         throw error;
     }
 

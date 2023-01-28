@@ -10,3 +10,10 @@ export const CreatePostScheme = yup.object().shape({
     location: yup.string().required('"location" is required').max(20, 'max of 20 lenght in "location"'),
     status: yup.string().required('"status" is required').max(10, 'max of 10 lenght in "status"').oneOf(["drafted", "deleted", "published"], 'status only accpets "drafted", "deleted", "published"'),
 })
+
+
+
+export const UpdatePostScheme = yup.object().shape({
+    message: yup.string().required('"message" is required').max(500, 'max of 500 lenght in "surname"'),
+    status: yup.string().required('"status" is required').max(10, 'max of 10 lenght in "status"').oneOf(["drafted", "deleted", "published"], 'status only accpets "drafted", "deleted", "published"'),
+})

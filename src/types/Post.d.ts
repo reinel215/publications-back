@@ -9,6 +9,17 @@ export interface Post {
     status: 'drafted' | 'deleted' | 'published';
 }
 
+export interface RemovePost {
+    author: string;
+    post_id: string;
+}
 
+
+export interface UpdatePost {
+    message: string;
+    status: 'drafted' | 'deleted' | 'published';
+    author: string;
+    post_id: string;
+}
 
 export type InsertPost = Omit<Post, "create_at" | "likes">
