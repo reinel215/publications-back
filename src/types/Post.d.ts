@@ -1,4 +1,4 @@
-
+import { User } from "./User";
 export interface Post {
     image?: string;
     message: string;
@@ -8,3 +8,7 @@ export interface Post {
     location: string;
     status: 'drafted' | 'deleted' | 'published';
 }
+
+
+
+export type InsertPost = Omit<Post, "create_at" | "likes">
