@@ -1,8 +1,8 @@
 import { Router, Request, Response, NextFunction } from 'express'
 import { PassportStatic } from 'passport';
-import { insertUser } from '../../dataAccess/user/insertUser';
 import isAuth from '../../middlewares/auth/auth';
 import { SignupRequestSchema } from '../../schemes/userSchemes';
+import registerUser from '../../services/users/registerUser';
 import { UserRequest } from '../../types/User';
 
 const router = Router();
@@ -14,7 +14,7 @@ const userRouter = (passport: PassportStatic) => {
         try {
             const userRequest: UserRequest = req.body;
             await SignupRequestSchema.validate(userRequest);
-            await insertUser(userRequest);
+            await registerUser(userRequest);
             res.status(200).json({ message: "The user has been registered" });
         } catch (error) {
             next(error);

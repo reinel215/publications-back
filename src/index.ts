@@ -63,6 +63,8 @@ app.use(compression());
 //RUTAS
 import userRouter from './routes/users/users';
 app.use('/api/users', userRouter(passport));
+import publicationsRouter from './routes/publications/publications';
+app.use('/api/publications', publicationsRouter())
 
 app.get('/favicon.ico', (req, res) => res.status(204));
 
