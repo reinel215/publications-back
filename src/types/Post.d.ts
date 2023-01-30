@@ -9,6 +9,12 @@ export interface Post {
     status: 'drafted' | 'deleted' | 'published';
 }
 
+
+export interface PostDb extends Post {
+    user_id: number;
+    post_id: number;
+}
+
 export interface RemovePost {
     author: string;
     post_id: string;

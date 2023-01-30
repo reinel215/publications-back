@@ -15,6 +15,16 @@ if (config.dev) {
 }
 
 
+//CORS
+import cors from 'cors';
+app.use(cors({
+    origin: "http://localhost:8080",
+    methods: "GET,POST,PUT,DELETE,PATCH",
+    credentials: true,
+})); 
+
+
+
 
 //EXPRESS SESSION
 const expressSession = require('express-session');
@@ -22,6 +32,7 @@ const sessionOptions = {
     secret: config.token,
     resave: false,
     saveUninitialized: false,
+    cookie: { secure: false }
 }
 app.use(expressSession(sessionOptions));
 
@@ -41,10 +52,6 @@ app.use(bodyParser.json()) //parse aplicattion json
 app.use(bodyParser.urlencoded({ extended: false }))
 
 
-
-//CORS
-import cors from 'cors';
-app.use(cors()); //activa el cors para todas las rutas
 
 
 //PROTECCION DE CABEZERAS

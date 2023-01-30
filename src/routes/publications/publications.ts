@@ -3,7 +3,7 @@ import { deletePublication } from '../../dataAccess/publications/deletePublicati
 import isAuth from '../../middlewares/auth/auth';
 import { CreatePostScheme, UpdatePostScheme } from '../../schemes/postSchemes';
 import createPubliction from '../../services/publications/createPublication';
-import getPublicationsByUserId from '../../services/publications/getPublicationsByUserId';
+import getPublicationsFilter from '../../services/publications/getPublicationsFilter';
 import likePublication from '../../services/publications/likePublication';
 import putPublication from '../../services/publications/putPublication';
 import removeLike from '../../services/publications/removeLike';
@@ -17,9 +17,15 @@ const publicationsRouter = () => {
 
     router.get("/", isAuth, async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const userId = req.user?.user_id.toString() || "";
-            const publications = await getPublicationsByUserId({ userId });
-            console.log(publications)
+            const filterStatus = req.query?.status?.toString().split(",");
+            const userId = req.query?.user_id?.toString();
+            const sortBy = req.query?.sort?.toString();
+
+            if (!filterStatus) {
+                res.status(404).json({error: "Error status is missing"})
+                return;
+            }
+            const publications = await getPublicationsFilter({ status: filterStatus, user_id: userId, sortBy: sortBy || "DESC" });
             res.status(200).json(publications);
         } catch (error) {
             next(error);
@@ -77,7 +83,9 @@ const publicationsRouter = () => {
                 author: req.user.user_id.toString(),
                 post_id: postId
             }
-            await putPublication(updatePost);
+
+            
+            await putPublication(updatePost, req.user.role === "admin");
 
             res.status(200).json({ message: "The post was updated!" });
         } catch (error) {

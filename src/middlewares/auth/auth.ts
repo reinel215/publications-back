@@ -5,7 +5,7 @@ const isAuth = (req: Request, res: Response, next: NextFunction) => {
     if (req.isAuthenticated())
         next();
     else
-        next({ status: 301, message: "Your not authorized" });
+        next({ status: 401, message: "Your not authorized!!" });
 }
 
 

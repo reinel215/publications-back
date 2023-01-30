@@ -2,6 +2,7 @@ import { Router, Request, Response, NextFunction } from 'express'
 import { PassportStatic } from 'passport';
 import isAuth from '../../middlewares/auth/auth';
 import { SignupRequestSchema } from '../../schemes/userSchemes';
+import getUser from '../../services/users/getUser';
 import registerUser from '../../services/users/registerUser';
 import { UserRequest } from '../../types/User';
 
@@ -25,8 +26,25 @@ const userRouter = (passport: PassportStatic) => {
     router.post('/auth/login', passport.authenticate('local', {}), (req: Request, res: Response) => {
         res.status(200).json({
             message: "ha iniciado sesion",
-            user: req?.user?.username
+            user: req?.user
         });
+    })
+
+
+    router.get("/:userId", async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const userId = req.params.userId;
+            if (!userId) {
+                res.status(404).json({ error: "Error on request" });
+                return;
+            }
+
+            const user = await getUser({ userId: userId });
+
+            res.status(200).json(user);
+        } catch (error) {
+            next(error);
+        }
     })
 
 
