@@ -1,9 +1,11 @@
 import { Client } from 'pg';
 import { config } from '../../config/config';
 
+/** Lib custom para la conexion a la base de datos */
 
 let client : Client;
 
+//se puede conectar por connection string o por parametros separados
 if (config.dbURL) {
     client = new Client({
         connectionString: config.dbURL
@@ -19,7 +21,7 @@ if (config.dbURL) {
 }
 
 
-
+//query generico para reutilizar
 export const query = async (query: string, values : (Object | null)[] = []) => {
 
     try {

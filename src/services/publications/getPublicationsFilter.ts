@@ -2,6 +2,10 @@ import { selectPulicationsByStatus } from "../../dataAccess/publications/selectP
 import { selectUserById } from "../../dataAccess/user/selectUserById";
 import { selectUsersByLikes } from "../../dataAccess/user/selectUsersByLikes";
 
+
+//consigue las publicaciones ordenadas
+//luego consigue el author y los usuarios de los likes
+//un ORM hubiese quedado mejor aqui, pero como solo era esta parte no integre Sequelize
 const getPublicationsFilter = async ({ status, user_id, sortBy }: { status: string[], user_id?: string, sortBy: string}) => {
     try {
         const posts = await selectPulicationsByStatus({ status, user_id, sortBy });

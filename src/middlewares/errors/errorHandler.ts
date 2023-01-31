@@ -1,6 +1,7 @@
 'use strict';
 import { ErrorRequestHandler } from 'express';
 
+//error middleware to response to the front
 export const errorHandler : ErrorRequestHandler = (err, req, res, next) => {
 
     const errorResponse = {

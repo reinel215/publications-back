@@ -18,7 +18,7 @@ if (config.dev) {
 //CORS
 import cors from 'cors';
 app.use(cors({
-    origin: process.env.CLIENT_URL,
+    origin: process.env.CLIENT_URL, //url del front
     methods: "GET,POST,PUT,DELETE,PATCH",
     credentials: true,
 }));
@@ -52,7 +52,7 @@ configPassport(passport); //configuramos passport
 
 //BODY PARSER
 import bodyParser from 'body-parser';
-app.use(bodyParser.json()) //parse aplicattion json
+app.use(bodyParser.json()) //parse aplication json
 app.use(bodyParser.urlencoded({ extended: false }))
 
 

@@ -1,5 +1,6 @@
 import { selectUserById } from "../../dataAccess/user/selectUserById";
 
+//get the user by userId
 const getUser = async ({ userId }: { userId: string}) => {
     try {
         return await selectUserById({ userId });
