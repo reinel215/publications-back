@@ -18,7 +18,7 @@ if (config.dev) {
 //CORS
 import cors from 'cors';
 app.use(cors({
-    origin: "http://localhost:8080",
+    origin: process.env.CLIENT_URL,
     methods: "GET,POST,PUT,DELETE,PATCH",
     credentials: true,
 })); 
