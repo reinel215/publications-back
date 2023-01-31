@@ -5,7 +5,7 @@ require('dotenv').config();
 export const config = {
     dbURL: process.env.DATABASE_URL,
     dev: process.env.NODE_ENV,
-    port: process.env.PORT || 3000,
+    port: process.env.PORT || 8080,
     dbUser: process.env.DB_USER,
     dbHost: process.env.DB_HOST,
     dbName: process.env.DB_NAME,

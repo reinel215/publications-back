@@ -21,18 +21,22 @@ app.use(cors({
     origin: process.env.CLIENT_URL,
     methods: "GET,POST,PUT,DELETE,PATCH",
     credentials: true,
-})); 
-
+}));
 
 
 
 //EXPRESS SESSION
 const expressSession = require('express-session');
+app.set('trust proxy', 1);
+app.enable("trust proxy")
 const sessionOptions = {
     secret: config.token,
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false }
+    cookie: {
+        secure: config.dev ? false : 'auto',
+        sameSite: config.dev ? "strict" : 'none'
+    }
 }
 app.use(expressSession(sessionOptions));
 

@@ -6,10 +6,7 @@ let client : Client;
 
 if (config.dbURL) {
     client = new Client({
-        connectionString: config.dbURL,
-        ssl: {
-            rejectUnauthorized: false
-        }
+        connectionString: config.dbURL
     })
 } else {
     client = new Client({
