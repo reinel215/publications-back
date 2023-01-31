@@ -1,0 +1,1 @@
+Este modulo esta basado en el patro DAO de la programacion orientada a objetos 
